@@ -3,8 +3,8 @@
 layout(location=0) in vec3 vertex;
 layout(location=1) in vec2 uvs;
 
-uniform float width;
-uniform float height;
+uniform float width = 0.2;
+uniform float height = 0.2;
 
 uniform vec2 position;
 uniform float depth = 1;

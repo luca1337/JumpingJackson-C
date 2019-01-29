@@ -21,5 +21,7 @@ void sprite_draw_color(sprite_t* sprite, const vec3_t color);
 void sprite_draw_texture(sprite_t* sprite);
 void sprite_set_color(sprite_t* sprite, const vec3_t color);
 void sprite_move(sprite_t* sprite, float x, float y);
+void sprite_set_position(sprite_t* sprite, float x, float y);
+void sprite_set_scale(sprite_t* sprite, float x, float y);
 
 #endif

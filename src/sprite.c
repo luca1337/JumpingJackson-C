@@ -78,8 +78,8 @@ int sprite_create(sprite_t* sprite, float width, float height, const char* textu
 
     sprite_mesh_cache_uniform(sprite);
 
-    sprite->width = width;
-    sprite->height = height;
+    sprite->width = w;
+    sprite->height = h;
 
     return 0;
 }
@@ -88,6 +88,18 @@ void sprite_move(sprite_t* sprite, float x, float y)
 {
     sprite->position.x += x * engine.context.delta_time;
     sprite->position.y += y * engine.context.delta_time;
+}
+
+void sprite_set_position(sprite_t* sprite, float x, float y)
+{
+    sprite->position.x = x;
+    sprite->position.y = y;
+}
+
+void sprite_set_scale(sprite_t* sprite, float x, float y)
+{
+    sprite->width = x;
+    sprite->height = y;
 }
 
 void sprite_draw_color(sprite_t* sprite, const vec3_t color)
@@ -120,10 +132,10 @@ void sprite_draw_texture(sprite_t* sprite)
     glBindVertexArray(sprite->vao);
 
     //bind uniforms
-    glUniform1f(sprite->shader_prg.width, sprite->width);
-    glUniform1f(sprite->shader_prg.height, sprite->height);
+    // glUniform1f(sprite->shader_prg.width, sprite->width);
+    // glUniform1f(sprite->shader_prg.height, sprite->height);
     glUniform2f(sprite->shader_prg.position, sprite->position.x, sprite->position.y);
-    glUniform3f(sprite->shader_prg.color, sprite->color.x, sprite->color.y, sprite->color.z);
+    // glUniform3f(sprite->shader_prg.color, sprite->color.x, sprite->color.y, sprite->color.z);
     
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }

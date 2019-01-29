@@ -3,6 +3,7 @@
 #include <engine.h>
 #include <sprite.h>
 #include <vec.h>
+#include <map.h>
 
 sprite_t sprite0;
 sprite_t sprite1;
@@ -13,14 +14,27 @@ engine_t engine;
 vec3_t col;
 vec3_t col2;
 
+map_t map0;
+
+static const char* textures[] = {
+    "wall.jpg",
+    "graass.jpg",
+};
+
+static int cells[1] = {
+    1
+};
+
 static void setup(engine_t* engine)
 {
-    col = vec3_init(1, 0, 1);
-    col2 = vec3_init(1, 1, 1);
+    // col = vec3_init(1, 0, 1);
+    // col2 = vec3_init(1, 1, 1);
 
-    sprite_create(&sprite0, 0.2, 0.2, "wall.jpg");
+    // sprite_create(&sprite0, 0.2, 0.2, "wall.jpg");
 
     // sprite_create(&sprite1, 0.1, 0.1);
+
+    map_create(&map0, 1, 1, cells, &textures);
 }
 
 static void draw(gl_context_t* context)
@@ -41,13 +55,15 @@ static void draw(gl_context_t* context)
     if(gl_get_key(context, SDL_SCANCODE_D))
         sprite_move(&sprite0, 1, 0);
 
-    sprite_draw_texture(&sprite0);
+    // sprite_draw_texture(&sprite0);
 
     // sprite_draw_color(&sprite1, col2);
 
     // vec2_t end = vec2_sub(sprite0.position, sprite1.position);
 
     // sprite_move(&sprite1, end.x, end.y);
+
+    map_draw(&map0);
 }
 
 int main(int argc, char** argv)
