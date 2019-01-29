@@ -1,0 +1,1 @@
+clang -Wno-pragma-pack -w -o main -I inc -I glad/include/glad -I glad/include -I SDL/include ./src/main.c ./src/engine.c ./src/gl_context.c ./src/shader_utils.c ./src/sprite.c ./src/map.c ./glad/src/glad.c ./src/vec.c -lSDL2 -L SDL/lib/x64
