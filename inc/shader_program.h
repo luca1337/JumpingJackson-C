@@ -7,10 +7,12 @@ typedef struct shader_program{
     GLuint position;
     GLuint rotation;
     GLuint scale;
+    GLuint draw_mode;
 
     GLuint width;
     GLuint height;
     GLuint color;
+    GLuint tex;
 
     GLuint camera_position;
     GLuint camera_rotation;
