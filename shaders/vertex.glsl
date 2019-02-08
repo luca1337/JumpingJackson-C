@@ -42,7 +42,9 @@ void main()
     float v_x = vertex.x;
     float v_y = vertex.y;
 
-    gl_Position = vec4(vec3(((v_x * scale.x) + p_x) * aspect_ratio - 0.25 + 0.07, (v_y * scale.y) + (-p_y) -0.1, vertex.z), 1);
+    //  * aspect_ratio - 0.25 + 0.07
+
+    gl_Position = vec4(vec3(((v_x * scale.x) + p_x), (v_y * scale.y) + (-p_y) , vertex.z), 1);
 
     pos_offset = position;
     out_uv = uvs;

@@ -61,6 +61,9 @@ int gl_context_create(gl_context_t* ctx, unsigned width, unsigned height, const 
     ctx->is_running = 1;
     ctx->post_hook_draw = post_hook_draw;
     ctx->key_state = SDL_GetKeyboardState(NULL);
+    
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     goto end0;
 
@@ -83,7 +86,7 @@ void gl_context_swap_buffers(gl_context_t* ctx)
 
 void gl_context_setup(gl_context_t* ctx)
 {
-    gl_clear_screen(0, 0, 0, 1);
+    gl_clear_screen(1, 0, 0, 1);
 }
 
 void gl_context_update(gl_context_t* ctx)

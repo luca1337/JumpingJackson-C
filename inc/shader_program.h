@@ -14,6 +14,10 @@ typedef struct shader_program{
     GLuint color;
     GLuint tex;
 
+    GLuint sprites_per_row;
+    GLuint sprites_per_col;
+    GLuint sprite_index;
+
     GLuint camera_position;
     GLuint camera_rotation;
     GLuint camera_fov;

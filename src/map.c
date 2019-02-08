@@ -1,7 +1,7 @@
 #include <map.h>
 #include <SDL.h>
 
-void map_create(map_t* map, int width, int height, int* cells, const char** textures)
+void map_create(map_t* map, int width, int height, float cell_width, float cell_height, int* cells, const char** textures)
 {
     map->cells = malloc(sizeof(int) * (width * height));
 
@@ -12,9 +12,12 @@ void map_create(map_t* map, int width, int height, int* cells, const char** text
 
     map->sprites = malloc(sizeof(sprite_t) * (map->width * map->height));
 
+    map->tex = malloc(sizeof(texture_t) * (map->width * map->height));
+
     for(int i = 0; i < map->width * map->height; i++)
     {
-        // sprite_create(&map->sprites[i], 0.2, 0.2, textures[map->cells[i]]);
+        texture_create(&map->tex[i], textures[map->cells[i]]);
+        sprite_create(&map->sprites[i], cell_width, cell_height);
     }
 }
 
@@ -26,6 +29,6 @@ void map_draw(map_t* map)
         float offset_y = (i / map->height) * map->sprites[i].height;
 
         sprite_set_position(&map->sprites[i], offset_x, offset_y);
-        // sprite_draw_texture(&map->sprites[i]);
+        sprite_draw_texture(&map->sprites[i], &map->tex[map->cells[i]]);
     }
 }

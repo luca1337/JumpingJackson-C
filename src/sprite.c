@@ -10,6 +10,10 @@ static void sprite_mesh_cache_uniform(sprite_t* sprite)
     sprite->shader_prg.draw_mode = glGetUniformLocation(engine.program, "draw_mode");
     sprite->shader_prg.color = glGetUniformLocation(engine.program, "frag_color");
     sprite->shader_prg.tex = glGetUniformLocation(engine.program, "tex");
+
+    sprite->shader_prg.sprites_per_row = glGetUniformLocation(engine.program, "sprites_per_row");
+    sprite->shader_prg.sprites_per_col = glGetUniformLocation(engine.program, "sprites_per_column");
+    sprite->shader_prg.sprite_index = glGetUniformLocation(engine.program, "sprite_index");
 }
 
 int sprite_create(sprite_t* sprite, float width, float height)
@@ -102,7 +106,6 @@ void sprite_draw_color(sprite_t* sprite, vec3_t color)
 
 void sprite_draw_texture(sprite_t* sprite, texture_t* texture)
 {
-
     glUseProgram(engine.program);
 
     glBindTexture(GL_TEXTURE_2D, texture->id);
