@@ -2,6 +2,7 @@
 
 // vbo layout
 layout(location=0) in vec3 vertex;
+layout(location=1) in vec2 uvs;
 
 // constant
 const float screen_x = 800.0;
@@ -14,6 +15,7 @@ uniform float depth = 1;
 
 // other vars
 float aspect_ratio;
+out vec2 out_uvs;
 
 float linear_convert(float value, float old_min, float old_max, float new_min, float new_max)
 {   
@@ -32,4 +34,6 @@ void main()
     float v_y = vertex.y;
 
     gl_Position = vec4(vec3(((v_x * scale.x) * aspect_ratio) + p_x, (v_y * scale.y) + (-p_y) , vertex.z), depth);
+
+    out_uvs = uvs;
 }

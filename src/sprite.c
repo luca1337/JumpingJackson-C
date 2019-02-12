@@ -5,16 +5,23 @@ extern engine_t engine;
 
 static void sprite_mesh_cache_uniform(sprite_t* sprite)
 {
-    // questo è provvisorio
+    // base_color
+    sprite->shader_prg[0].position = glGetUniformLocation(engine.base_color, "position");
+    sprite->shader_prg[0].scale = glGetUniformLocation(engine.base_color, "scale");
+    sprite->shader_prg[0].color = glGetUniformLocation(engine.base_color, "frag_color");
 
-    sprite->shader_prg.position = glGetUniformLocation(engine.base_color, "position");
-    sprite->shader_prg.scale = glGetUniformLocation(engine.base_color, "scale");
-    sprite->shader_prg.color = glGetUniformLocation(engine.base_color, "frag_color");
+    // texture
+    sprite->shader_prg[1].position = glGetUniformLocation(engine.texture, "position");
+    sprite->shader_prg[1].scale = glGetUniformLocation(engine.texture, "scale");
 
-    sprite->shader_prg.sprites_per_col = glGetUniformLocation(engine.base_color, "sprites_per_column");
-    sprite->shader_prg.sprites_per_row = glGetUniformLocation(engine.base_color, "sprites_per_row");
-    sprite->shader_prg.x_offset = glGetUniformLocation(engine.base_color, "x_offset");
-    sprite->shader_prg.y_offset = glGetUniformLocation(engine.base_color, "y_offset");
+    //animation
+    sprite->shader_prg[2].position = glGetUniformLocation(engine.animation, "position");
+    sprite->shader_prg[2].scale = glGetUniformLocation(engine.animation, "scale");
+    sprite->shader_prg[2].color = glGetUniformLocation(engine.animation, "frag_color");
+    sprite->shader_prg[2].sprites_per_col = glGetUniformLocation(engine.animation, "sprites_per_column");
+    sprite->shader_prg[2].sprites_per_row = glGetUniformLocation(engine.animation, "sprites_per_row");
+    sprite->shader_prg[2].x_offset = glGetUniformLocation(engine.animation, "x_offset");
+    sprite->shader_prg[2].y_offset = glGetUniformLocation(engine.animation, "y_offset");
 }
 
 int sprite_create(sprite_t* sprite, float width, float height)
@@ -100,9 +107,9 @@ void sprite_draw_color(sprite_t* sprite, vec3_t color, GLuint program)
 
     //bind uniforms
     sprite_set_color(sprite, color);
-    glUniform2f(sprite->shader_prg.position, sprite->position.x, sprite->position.y);
-    glUniform2f(sprite->shader_prg.scale, sprite->scale.x, sprite->scale.y);
-    glUniform3f(sprite->shader_prg.color, sprite->color.x, sprite->color.y, sprite->color.z);
+    glUniform2f(sprite->shader_prg[0].position, sprite->position.x, sprite->position.y);
+    glUniform2f(sprite->shader_prg[0].scale, sprite->scale.x, sprite->scale.y);
+    glUniform3f(sprite->shader_prg[0].color, sprite->color.x, sprite->color.y, sprite->color.z);
     
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
@@ -119,8 +126,8 @@ void sprite_draw_texture(sprite_t* sprite, texture_t* texture, GLuint program)
     glBindVertexArray(sprite->vao);
 
     //bind uniforms
-    glUniform2f(sprite->shader_prg.position, sprite->position.x, sprite->position.y);
-    glUniform2f(sprite->shader_prg.scale, sprite->scale.x, sprite->scale.y);
+    glUniform2f(sprite->shader_prg[1].position, sprite->position.x, sprite->position.y);
+    glUniform2f(sprite->shader_prg[1].scale, sprite->scale.x, sprite->scale.y);
     
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
@@ -137,12 +144,12 @@ void sprite_draw_texture_offset(sprite_t* sprite, texture_t* texture, int x_offs
     glBindVertexArray(sprite->vao);
 
     // Bind uniforms
-    glUniform2f(sprite->shader_prg.position, sprite->position.x, sprite->position.y);
-    glUniform2f(sprite->shader_prg.scale, sprite->scale.x, sprite->scale.y);
-    glUniform1i(sprite->shader_prg.sprites_per_row, sprites_in_row);
-    glUniform1i(sprite->shader_prg.sprites_per_col, sprites_in_column);
-    glUniform1i(sprite->shader_prg.x_offset, x_offset);
-    glUniform1i(sprite->shader_prg.y_offset, y_offset);
+    glUniform2f(sprite->shader_prg[2].position, sprite->position.x, sprite->position.y);
+    glUniform2f(sprite->shader_prg[2].scale, sprite->scale.x, sprite->scale.y);
+    glUniform1i(sprite->shader_prg[2].sprites_per_row, sprites_in_row);
+    glUniform1i(sprite->shader_prg[2].sprites_per_col, sprites_in_column);
+    glUniform1i(sprite->shader_prg[2].x_offset, x_offset);
+    glUniform1i(sprite->shader_prg[2].y_offset, y_offset);
 
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }

@@ -14,7 +14,7 @@ typedef struct sprite{
     vec2_t position;
     vec2_t scale;
     vec3_t color;
-    shader_program_t shader_prg;
+    shader_program_t shader_prg[3];
 }sprite_t;
 
 int sprite_create(sprite_t* sprite, float width, float height);

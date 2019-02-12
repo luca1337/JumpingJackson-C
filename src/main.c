@@ -14,12 +14,67 @@ vec3_t col;
 
 int sprites_per_column = 7;
 int sprites_per_row = 4;
-int num_of_key_frames = 4;
-int key_frames[] = { 0, 1, 2, 3 };
-float frame_length = 0.04;
+int num_of_key_frames = 16;
+int key_frames[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 8, 10, 11, 12, 13, 14, 15, 16 };
+float frame_length = 0.02;
 float timer;
 int k_index;
 int current_index;
+
+typedef struct node{
+    void** data;
+    struct node* next;
+    struct node* prev;
+}node_t;
+
+typedef struct list{
+    node_t* head;
+    node_t* tail;
+    size_t count;
+}list_t;
+
+void list_append(list_t* list, void* data)
+{
+    node_t* item = malloc(sizeof(node_t));
+    item->data = malloc(sizeof(data));
+
+    if(!list->head)
+    {
+        item->data = data;
+        list->head = item;
+        list->tail = item;
+        list->count++;
+        return;
+    }
+
+    list->tail->next = item;
+    item->prev = list->tail;
+    list->tail = item;
+    item->data = data;
+    list->count++;
+}
+
+void* list_get(list_t* list, void* data)
+{
+    void* ret = NULL;
+
+    node_t* item = list->head;
+
+    while(item)
+    {
+        SDL_Log("iter");
+        if(!memcmp(item->data, data, sizeof(data)))
+        {
+            SDL_Log("found!");
+            ret = item->data;
+            return ret;
+        }
+
+        item = item->next;
+    }
+
+    return ret;
+}
 
 static void setup(engine_t* engine)
 {
@@ -48,11 +103,11 @@ static void draw(gl_context_t* context)
     if(gl_get_key(context, SDL_SCANCODE_D))
         sprite_move(&sprite0, 100, 0);
 
-    // sprite_draw_color(&sprite0, col);
+    // sprite_draw_color(&sprite0, col, 0);
 
     // sprite_draw_texture(&sprite0, &tex0, 0);
 
-    /* timer += context->delta_time;
+    timer += context->delta_time;
     if(timer > frame_length)
     {
         if(k_index > num_of_key_frames)
@@ -73,7 +128,7 @@ static void draw(gl_context_t* context)
                                 y_offset,
                                 sprites_per_row,
                                 sprites_per_column,
-                                0); */
+                                0);
 }
 
 int main(int argc, char** argv)
