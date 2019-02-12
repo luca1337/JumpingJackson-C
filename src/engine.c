@@ -1,13 +1,13 @@
 #include <engine.h>
-\
+
 static void engine_setup(engine_t* engine)
 {
-    engine->program = compile_shader("shaders/vertex.glsl", "shaders/fragment.glsl");
-
-    glUseProgram(engine->program);
+    engine->base_color = compile_shader("shaders/vertex_color.glsl", NULL, "shaders/fragment_color.glsl");
+    engine->texture = compile_shader("shaders/vertex_texture.glsl", NULL, "shaders/fragment_texture.glsl");
+    engine->animation = compile_shader("shaders/vertex_animation.glsl", NULL, "shaders/fragment_animation.glsl");
 }
 
-int engine_create(engine_t* engine, unsigned width, unsigned height, const char* title, unsigned depth, unsigned major, unsigned minor, void (*post_hook_draw)(gl_context_t* context), void (*post_engine_setup)(engine_t* engine))
+int engine_create(engine_t* engine, unsigned width, unsigned height, const char* title, unsigned depth, unsigned major, unsigned minor, void (*post_hook_draw)(gl_context_t* context), void (*post_engine_setup)(engine_t* engine), void (*post_shader_setup)(engine_t* engine))
 {
     memset(engine, 0, sizeof(engine_t));
 
@@ -28,6 +28,11 @@ int engine_create(engine_t* engine, unsigned width, unsigned height, const char*
     engine_setup(engine);
 
     post_engine_setup(engine);
+
+    if(!post_shader_setup)
+        engine_setup(engine);
+    else
+        post_shader_setup(engine);
 
 end0:
     return error;

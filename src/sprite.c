@@ -5,15 +5,16 @@ extern engine_t engine;
 
 static void sprite_mesh_cache_uniform(sprite_t* sprite)
 {
-    sprite->shader_prg.scale = glGetUniformLocation(engine.program, "scale");
-    sprite->shader_prg.position = glGetUniformLocation(engine.program, "position");
-    sprite->shader_prg.draw_mode = glGetUniformLocation(engine.program, "draw_mode");
-    sprite->shader_prg.color = glGetUniformLocation(engine.program, "frag_color");
-    sprite->shader_prg.tex = glGetUniformLocation(engine.program, "tex");
+    // questo è provvisorio
 
-    sprite->shader_prg.sprites_per_row = glGetUniformLocation(engine.program, "sprites_per_row");
-    sprite->shader_prg.sprites_per_col = glGetUniformLocation(engine.program, "sprites_per_column");
-    sprite->shader_prg.sprite_index = glGetUniformLocation(engine.program, "sprite_index");
+    sprite->shader_prg.position = glGetUniformLocation(engine.base_color, "position");
+    sprite->shader_prg.scale = glGetUniformLocation(engine.base_color, "scale");
+    sprite->shader_prg.color = glGetUniformLocation(engine.base_color, "frag_color");
+
+    sprite->shader_prg.sprites_per_col = glGetUniformLocation(engine.base_color, "sprites_per_column");
+    sprite->shader_prg.sprites_per_row = glGetUniformLocation(engine.base_color, "sprites_per_row");
+    sprite->shader_prg.x_offset = glGetUniformLocation(engine.base_color, "x_offset");
+    sprite->shader_prg.y_offset = glGetUniformLocation(engine.base_color, "y_offset");
 }
 
 int sprite_create(sprite_t* sprite, float width, float height)
@@ -88,34 +89,60 @@ void sprite_set_color(sprite_t* sprite, const vec3_t color)
     sprite->color = color;
 }
 
-void sprite_draw_color(sprite_t* sprite, vec3_t color)
+void sprite_draw_color(sprite_t* sprite, vec3_t color, GLuint program)
 {
-    glUseProgram(engine.program);
+    if(!program)
+        glUseProgram(engine.base_color);
+    else
+        glUseProgram(program);
 
     glBindVertexArray(sprite->vao);
 
     //bind uniforms
     sprite_set_color(sprite, color);
-    glUniform1f(sprite->shader_prg.draw_mode, 1);
-    glUniform2f(sprite->shader_prg.scale, sprite->scale.x, sprite->scale.y);
     glUniform2f(sprite->shader_prg.position, sprite->position.x, sprite->position.y);
+    glUniform2f(sprite->shader_prg.scale, sprite->scale.x, sprite->scale.y);
     glUniform3f(sprite->shader_prg.color, sprite->color.x, sprite->color.y, sprite->color.z);
     
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-void sprite_draw_texture(sprite_t* sprite, texture_t* texture)
+void sprite_draw_texture(sprite_t* sprite, texture_t* texture, GLuint program)
 {
-    glUseProgram(engine.program);
+    if(!program)
+        glUseProgram(engine.texture);
+    else
+        glUseProgram(program);
 
     glBindTexture(GL_TEXTURE_2D, texture->id);
 
     glBindVertexArray(sprite->vao);
 
     //bind uniforms
-    glUniform1f(sprite->shader_prg.draw_mode, 0);
-    glUniform2f(sprite->shader_prg.scale, sprite->scale.x, sprite->scale.y);
     glUniform2f(sprite->shader_prg.position, sprite->position.x, sprite->position.y);
+    glUniform2f(sprite->shader_prg.scale, sprite->scale.x, sprite->scale.y);
     
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+}
+
+void sprite_draw_texture_offset(sprite_t* sprite, texture_t* texture, int x_offset, int y_offset, int sprites_in_row, int sprites_in_column, GLuint program)
+{
+    if(!program)
+        glUseProgram(engine.animation);
+    else
+        glUseProgram(program);
+
+    glBindTexture(GL_TEXTURE0, texture->id);
+
+    glBindVertexArray(sprite->vao);
+
+    // Bind uniforms
+    glUniform2f(sprite->shader_prg.position, sprite->position.x, sprite->position.y);
+    glUniform2f(sprite->shader_prg.scale, sprite->scale.x, sprite->scale.y);
+    glUniform1i(sprite->shader_prg.sprites_per_row, sprites_in_row);
+    glUniform1i(sprite->shader_prg.sprites_per_col, sprites_in_column);
+    glUniform1i(sprite->shader_prg.x_offset, x_offset);
+    glUniform1i(sprite->shader_prg.y_offset, y_offset);
+
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }

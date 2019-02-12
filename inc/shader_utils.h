@@ -5,6 +5,6 @@
 #include <SDL.h>
 #include <glad.h>
 
-GLuint compile_shader(const char* vertex, const char* fragment);
+GLuint compile_shader(const char* vertex, const char* geometry, const char* fragment);
 
 #endif

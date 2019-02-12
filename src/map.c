@@ -29,6 +29,6 @@ void map_draw(map_t* map)
         float offset_y = (i / map->height) * map->sprites[i].height;
 
         sprite_set_position(&map->sprites[i], offset_x, offset_y);
-        sprite_draw_texture(&map->sprites[i], &map->tex[map->cells[i]]);
+        sprite_draw_texture(&map->sprites[i], &map->tex[map->cells[i]], 0);
     }
 }

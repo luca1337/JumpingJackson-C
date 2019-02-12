@@ -53,22 +53,32 @@ static GLuint _compile_shader(GLenum shader_type, const char* shader)
     return shader_final;
 }
 
-GLuint compile_shader(const char* vertex, const char* fragment)
+GLuint compile_shader(const char* vertex, const char* geometry, const char* fragment)
 {
     GLuint program = glCreateProgram();
 
+    GLuint geometry_shader;
+
     GLuint vertex_shader = _compile_shader(GL_VERTEX_SHADER, vertex);
+    if(geometry)
+        geometry_shader = _compile_shader(GL_GEOMETRY_SHADER, geometry);
     GLuint fragment_shader = _compile_shader(GL_FRAGMENT_SHADER, fragment);
 
     glAttachShader(program, vertex_shader);
+    if(geometry)
+        glAttachShader(program, geometry_shader);
     glAttachShader(program, fragment_shader);
 
     glLinkProgram(program);
 
     glDetachShader(program, vertex_shader);
+    if(geometry)
+        glDetachShader(program, geometry_shader);
     glDetachShader(program, fragment_shader);
 
     glDeleteShader(vertex_shader);
+    if(geometry)
+        glDeleteShader(geometry_shader);
     glDeleteShader(fragment_shader);
 
     glUseProgram(program);

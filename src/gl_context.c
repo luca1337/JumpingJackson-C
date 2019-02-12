@@ -86,7 +86,7 @@ void gl_context_swap_buffers(gl_context_t* ctx)
 
 void gl_context_setup(gl_context_t* ctx)
 {
-    gl_clear_screen(1, 0, 0, 1);
+    gl_clear_screen(0, 0, 0, 1);
 }
 
 void gl_context_update(gl_context_t* ctx)
